@@ -5,12 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.watchstoreui.screens.DetailScreen
 import com.example.watchstoreui.screens.HomeScreen
 import com.example.watchstoreui.ui.theme.WatchStoreUITheme
 
@@ -19,31 +21,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navHostController = rememberNavController()
             WatchStoreUITheme {
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-//                }
-                HomeScreen()
+                Scaffold (
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    SetUpNavigation(navHostController = navHostController)
+                }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    WatchStoreUITheme {
-        Greeting("Android")
-    }
+fun SetUpNavigation(navHostController: NavHostController) {
+         NavHost( startDestination = "Home" , navController = navHostController ) {
+               composable(route="home") {
+                   HomeScreen(navHostController = navHostController)
+               }
+               composable(route="detail"){
+                   DetailScreen(onClickBack = {navHostController.popBackStack()})
+               }
+         }
 }

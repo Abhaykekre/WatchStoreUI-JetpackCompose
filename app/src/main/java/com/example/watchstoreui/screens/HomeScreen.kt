@@ -23,6 +23,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.watchstoreui.R
 import com.example.watchstoreui.component.SearchBarView
 import com.example.watchstoreui.component.ViewPagerItem
@@ -33,11 +35,17 @@ import com.example.watchstoreui.data.watchItems
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController,
+) {
     val pagerState = rememberPagerState { itemViewPager.size }
     Surface(
-        modifier = modifier.fillMaxSize().padding(top = 50.dp
-        )
+        modifier = modifier
+            .fillMaxSize()
+            .padding(
+                top = 0.dp
+            )
     ) {
         Column(
             modifier = modifier.padding(horizontal = 16.dp)
@@ -84,7 +92,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 columns = GridCells.Fixed(2)
             ) {
                items(items = watchItems){ watch->
-                   WatchCard(watch = watch)
+                   WatchCard(watch = watch, onClick = {navHostController.navigate("detail")})
                }
             }
         }
@@ -94,5 +102,5 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(navHostController = rememberNavController())
 }
